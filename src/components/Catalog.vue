@@ -39,7 +39,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .main-grid {
   display: grid;
   grid-template-columns: 400px 1fr;

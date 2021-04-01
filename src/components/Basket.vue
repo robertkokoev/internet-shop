@@ -38,7 +38,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .main-grid {
   display: grid;
   grid-template-columns: 1fr 400px;
