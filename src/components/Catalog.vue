@@ -17,11 +17,11 @@
     </div>
 
     <div class="cards-grid">
-      <v-card outlined v-for="item in [1,2,3,4,5,6,7,8,9]" v-bind:key="item">
-        <v-card-title>Название {{ item }}</v-card-title>
-        <v-card-subtitle>19 999р.</v-card-subtitle>
-        <v-img height="200px"></v-img>
-        <v-card-text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci alias, dolore hic necessitatibus quod voluptate? Consequatur facere magni pariatur rerum.</v-card-text>
+      <v-card outlined v-for="item in goods" v-bind:key="item.name">
+        <v-card-title>{{ item.name }}</v-card-title>
+        <v-card-subtitle>{{ item.price }}р.</v-card-subtitle>
+        <v-img :src="item.photo" contain height="200px"></v-img>
+        <v-card-text>{{ item.description }}</v-card-text>
         <v-card-actions>
           <v-btn outlined color="primary">
             В корзину
@@ -34,8 +34,24 @@
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
-  name: 'Catalog'
+  name: 'Catalog',
+  data: () => ({
+    goods: []
+  }),
+  methods: {
+    async getGoods() {
+      const ref = await firebase.database().ref('goods').once('value');
+
+      this.goods = ref.val();
+      console.log(this.goods);
+    }
+  },
+  created() {
+    this.getGoods();
+  }
 }
 </script>
 
@@ -49,7 +65,7 @@ export default {
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 1rem;
 }
 
