@@ -1,19 +1,35 @@
 <template>
   <div class="main-grid">
     <h1 class="text-md-h3">Регистрация</h1>
-    <v-text-field label="Имя" outlined></v-text-field>
-    <v-text-field label="Почта" outlined></v-text-field>
-    <v-text-field label="Пароль" outlined></v-text-field>
+    <v-text-field v-model="name" label="Имя" outlined></v-text-field>
+    <v-text-field v-model="email" label="Почта" outlined type="email"></v-text-field>
+    <v-text-field v-model="password" label="Пароль" outlined type="password"></v-text-field>
     <v-checkbox label="Согласие на обработку данных"></v-checkbox>
-    <v-btn color="primary">Зарегистрироваться</v-btn>
+
+    <v-btn color="primary"
+           @click="registration()"
+           >
+      Зарегистрироваться
+    </v-btn>
   </div>
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
   name: 'Registration',
-  props: {
-    msg: String
+  data: () => ({
+    name: '',
+    email: '',
+    password: '',
+    snackbar: false
+  }),
+  methods: {
+    registration() {
+      firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        .then(() => this.$router.push('catalog'))
+    }
   }
 }
 </script>

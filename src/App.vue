@@ -26,17 +26,26 @@
             </v-btn>
           </router-link>
 
-          <router-link v-if="true" to="/auth">
-            <v-btn tile elevation="0">
-              Войти
-              <v-icon class="material-icons-outlined">person</v-icon>
-            </v-btn>
-          </router-link>
+          <div v-if="!user" style="display: contents">
+            <router-link to="/auth">
+              <v-btn tile elevation="0">
+                Вход
+                <v-icon class="material-icons-outlined">login</v-icon>
+              </v-btn>
+            </router-link>
 
-          <router-link v-if="false" to="/registration">
-            <v-btn tile elevation="0">
-              Регистрация
-              <v-icon class="material-icons-outlined">person</v-icon>
+            <router-link to="/registration">
+              <v-btn tile elevation="0">
+                Регистрация
+                <v-icon class="material-icons-outlined">person</v-icon>
+              </v-btn>
+            </router-link>
+          </div>
+
+          <router-link v-if="user" to="/catalog">
+            <v-btn @click="logout()" tile elevation="0">
+              Выход
+              <v-icon class="material-icons-outlined">logout</v-icon>
             </v-btn>
           </router-link>
         </div>
@@ -50,8 +59,23 @@
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
   name: 'App',
+  data: () => ({
+    user: {}
+  }),
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.user = user
+    })
+  },
+  methods: {
+    logout() {
+      firebase.auth().signOut();
+    }
+  }
 };
 </script>
 
