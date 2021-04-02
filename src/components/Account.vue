@@ -1,15 +1,27 @@
 <template>
   <div class="grid">
     <v-card>
-      <v-card-title>Кокоев Роберт Эдуардович</v-card-title>
-      <v-card-subtitle>kokoev.robert@mail.ru</v-card-subtitle>
+      <v-card-title>{{ name }}</v-card-title>
+      <v-card-subtitle>{{ email }}</v-card-subtitle>
     </v-card>
   </div>
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
-  name: 'Account'
+  name: 'Account',
+  data: () => ({
+    name: '',
+    email: ''
+  }),
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.email = user.email;
+      this.name = user.displayName;
+    })
+  }
 }
 </script>
 

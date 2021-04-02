@@ -28,6 +28,9 @@ export default {
   methods: {
     registration() {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        .then(result => result.user.updateProfile({
+          displayName: this.name
+        }))
         .then(() => this.$router.push('catalog'))
     }
   }
