@@ -23,7 +23,7 @@
         <v-img :src="item.photo" contain height="200px"></v-img>
         <v-card-text>{{ item.description }}</v-card-text>
         <v-card-actions>
-          <v-btn outlined color="primary">
+          <v-btn @click="addToBasket(item.id)" outlined color="primary">
             В корзину
             <v-icon>add_shopping_cart</v-icon>
           </v-btn>
@@ -45,8 +45,15 @@ export default {
     async getGoods() {
       const ref = await firebase.database().ref('goods').once('value');
 
-      this.goods = ref.val();
+      const value = ref.val();
+      const keys = Object.keys(value);
+      this.goods = keys.map(k => ({ ...value[k], id: k }))
       console.log(this.goods);
+    },
+    addToBasket(id) {
+      const basketKey = 'basket';
+      const currentBasket = JSON.parse(localStorage.getItem(basketKey));
+      localStorage.setItem(basketKey, JSON.stringify([...(currentBasket || []), id]))
     }
   },
   created() {
